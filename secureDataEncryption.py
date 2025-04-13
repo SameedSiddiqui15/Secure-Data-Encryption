@@ -151,7 +151,15 @@ elif choice == "Retrieve Data":
         else:
             st.write("🔐 Encrypted Data Entries:")
             for i, item in enumerate(user_data):
-                st.code(item, language="text")
+                st.markdown(
+                    f"""
+                    <div style="background-color:#1e1e1e; padding:10px; border-radius:8px; color:white; font-family:monospace; word-wrap:break-word; overflow-wrap:break-word; white-space:pre-wrap;">
+                        {item}
+                    </div>
+                    """,
+                    unsafe_allow_html=True
+                )
+
 
             encrypted_input = st.text_area("Enter Encrypted Text")
             passkey = st.text_input("Enter Passkey to Decrypt", type="password")
