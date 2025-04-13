@@ -93,7 +93,7 @@ elif choice == "Register":
                 st.success("You Registered Successfully!✅")
                 time.sleep(1)
                 st.session_state.choice = "Login"
-                st.experimental_rerun()
+                st.rerun()
         else:
             st.error("❌ Both fields are required & must be filled correctly.")
 
@@ -148,7 +148,8 @@ elif choice == "Store Data":
                 st.success("✅ Data encrypted and saved!")
                 time.sleep(1)
                 st.session_state.choice = "Retrieve Data"
-                st.experimental_rerun()
+                st.rerun()
+                
             else:
                 st.error("All fields are required.")
 
