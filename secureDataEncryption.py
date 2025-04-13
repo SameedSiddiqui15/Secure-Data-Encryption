@@ -61,7 +61,8 @@ stored_data = load_data()
 
 st.title("Secure Multi-User Data System 🔐")
 menu = ["Home", "Register", "Login", "Store Data", "Retrieve Data"]
-choice = st.sidebar.selectbox("Navigation", menu)
+st.session_state.choice = st.sidebar.selectbox("Navigation", menu, index=menu.index(st.session_state.choice))
+choice = st.session_state.choice
 
 # === Home Page ===
 if choice == "Home":
@@ -86,6 +87,9 @@ elif choice == "Register":
                 }
                 save_data(stored_data)
                 st.success("You Registered Successfully!✅")
+                time.sleep(1)
+                st.session_state.choice = "Login"
+                st.experimental_rerun()
         else:
             st.error("❌ Both fields are required & must be filled correctly.")
 
@@ -108,6 +112,9 @@ elif choice == "Login":
             st.session_state.authenticated_user = username
             st.session_state.failed_attempts = 0
             st.success(f"✅ Welcome {username}!")
+            time.sleep(1)
+            st.session_state.choice = "Store Data"
+            st.experimental_rerun()
         else:
             st.session_state.failed_attempts += 1
             remaining = 3 - st.session_state.failed_attempts
@@ -135,6 +142,9 @@ elif choice == "Store Data":
                 stored_data[st.session_state.authenticated_user]["data"].append(encrypted)
                 save_data(stored_data)
                 st.success("✅ Data encrypted and saved!")
+                time.sleep(1)
+                st.session_state.choice = "Retrieve Data"
+                st.experimental_rerun()
             else:
                 st.error("All fields are required.")
 
