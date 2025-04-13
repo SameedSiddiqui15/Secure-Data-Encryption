@@ -118,7 +118,7 @@ elif choice == "Login":
             st.success(f"✅ Welcome {username}!")
             # time.sleep(1)
             st.session_state.choice = "Store Data"
-            st.experimental_rerun
+            st.rerun
         else:
             st.session_state.failed_attempts += 1
             remaining = 3 - st.session_state.failed_attempts
