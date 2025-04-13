@@ -61,7 +61,11 @@ stored_data = load_data()
 
 st.title("Secure Multi-User Data System 🔐")
 menu = ["Home", "Register", "Login", "Store Data", "Retrieve Data"]
-st.session_state.choice = st.sidebar.selectbox("Navigation", menu, index=menu.index(st.session_state.choice))
+if "choice" not in st.session_state:
+    st.session_state["choice"] = "Home"
+
+selected_index = menu.index(st.session_state["choice"])
+st.session_state["choice"] = st.sidebar.selectbox("Navigation", menu, index=selected_index)
 choice = st.session_state.choice
 
 # === Home Page ===
