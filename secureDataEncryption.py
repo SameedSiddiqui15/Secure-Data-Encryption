@@ -37,7 +37,7 @@ def save_data(data):
 # Generate encryption key using PBKDF2
 def generate_key(passkey):
     key = pbkdf2_hmac('sha256', passkey.encode(), SALT, 100000)
-    return urlsafe_b64decode(key)  # ❌ This will likely throw error. Use `urlsafe_b64encode` instead
+    return urlsafe_b64encode(key)
 
 # Hash the password securely
 def hash_password(password):
