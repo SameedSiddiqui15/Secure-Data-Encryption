@@ -4,7 +4,7 @@ import hashlib
 import json
 import os 
 import time
-from cryptography import Fernet 
+from cryptography.fernet import Fernet
 from base64 import urlsafe_b64decode
 from hashlib import pbkdf2_hmac
 
