@@ -3,10 +3,14 @@ import streamlit as st
 import hashlib
 import json
 import os 
-import time
 from cryptography.fernet import Fernet
 from base64 import urlsafe_b64encode
 from hashlib import pbkdf2_hmac
+from extra_streamlit_components import CookieManager
+import time
+
+# Initialize Cookie Manager
+cookie_manager = CookieManager()
 
 DATA_FILE = "secure_data.json"
 SALT = b"secure_salt_value"  # Used for password hashing
@@ -20,12 +24,17 @@ if "failed_attempts" not in st.session_state:
 if "lockout_time" not in st.session_state:
     st.session_state.lockout_time = 0
 
-# Check for persisted login state
+# Check for persisted login from cookies
 if not st.session_state.authenticated_user:
-    # Try to get persisted login from local storage
-    persisted_login = st.experimental_get_query_params().get("user", None)
-    if persisted_login and persisted_login[0] in load_data():
-        st.session_state.authenticated_user = persisted_login[0]
+    try:
+        cookies = cookie_manager.get_all()
+        if "auth_user" in cookies:
+            username = cookies["auth_user"]
+            stored_data = load_data()
+            if username in stored_data:
+                st.session_state.authenticated_user = username
+    except:
+        pass
 
 # Load data from JSON file
 def load_data():
@@ -127,7 +136,7 @@ elif choice == "Login":
             
             # Persist login if "Remember me" is checked
             if remember_me:
-                st.experimental_set_query_params(user=username)
+                cookie_manager.set("auth_user", username)
             
             st.success(f"✅ Welcome {username}!")
             st.session_state.choice = "Store Data"
@@ -194,7 +203,8 @@ elif choice == "Retrieve Data":
 # === Logout Page ===
 elif choice == "Logout":
     if st.session_state.authenticated_user:
-        st.experimental_set_query_params()  # Clear persisted login
+        # Clear the authentication cookie
+        cookie_manager.delete("auth_user")
         st.session_state.authenticated_user = None
         st.success("✅ Successfully logged out!")
         st.session_state.choice = "Home"
